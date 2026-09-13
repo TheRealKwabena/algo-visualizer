@@ -1,0 +1,14 @@
+.array-view {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 300px;
+  padding: 1rem;
+}
+
+/* TODO: style your bar elements. A starting point:
+.array-view .bar {
+  flex: 1;
+  background: var(--accent);
+}
+*/

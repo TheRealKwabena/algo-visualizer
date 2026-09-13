@@ -16,5 +16,11 @@ type ArrayViewProps = {
 // - Keep this component dumb: it only knows about `values` right now.
 //   No algorithm knowledge, no highlighting yet — that's a later milestone.
 export function ArrayView({ values }: ArrayViewProps) {
-  return <div className="array-view">{/* your bars go here */}</div>;
+  return <div className="array-view">{
+    values.map((value, index) => (
+      <div className="bar" key={index} style={{ height: `${value / Math.max(...values) * 100}%` }}>
+        {value}</div>
+    ))
+  }
+  </div>;
 }

@@ -20,4 +20,21 @@ export const insertionSort: SortAlgorithm = function* (
   array: number[],
 ): Generator<Step, void, unknown> {
   // your implementation here
+
+
+  let copy = [...array];
+
+  for (let i = 1; i < copy.length; i++) {
+    const value = copy[i];
+    let j = i - 1;
+    while (j >= 0 && copy[j] > value) {
+      yield {type: 'compare', indices: [j, j + 1]};
+      copy[j + 1] = copy[j];
+      yield {type: 'overwrite', index: j + 1, value: copy[j]};
+      j--;
+    }
+    copy[j + 1] = value;
+    yield {type: 'overwrite', index: j + 1, value: value};
+  }
+  yield {type: 'done'};
 };

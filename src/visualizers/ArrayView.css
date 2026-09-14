@@ -8,7 +8,8 @@
 
 .array-view .bar {
   flex: 1;
-  background: var(--accent);
+  background: #ffffff;
+  color: #000000;
   transition: background-color 100ms ease;
 }
 

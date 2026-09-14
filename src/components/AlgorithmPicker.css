@@ -1,0 +1,8 @@
+.algorithm-picker {
+  font-family: var(--mono);
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+  color: var(--text-h);
+}

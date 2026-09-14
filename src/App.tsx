@@ -1,30 +1,29 @@
-import { bubbleSort } from "./algorithms/sorting/bubbleSort";
-import { Controls } from "./components/Controls";
-import { useAlgorithmPlayer } from "./hooks/useAlgorithmPlayer";
-import { ArrayView } from "./visualizers/ArrayView";
+import { useState } from "react";
+import { sortingAlgorithms } from "./algorithms/sorting";
+import { AlgorithmPicker } from "./components/AlgorithmPicker";
+import { SortingVisualizer } from "./components/SortingVisualizer";
 import "./App.css";
 
 const initialArray = [5, 2, 8, 1, 9, 3, 7, 4, 6];
 
 function App() {
-  const player = useAlgorithmPlayer(initialArray, bubbleSort);
+  const [selectedId, setSelectedId] = useState(sortingAlgorithms[0].id);
+  const selected = sortingAlgorithms.find(
+    (algorithm) => algorithm.id === selectedId,
+  )!;
 
   return (
     <div className="app">
       <h1>Algorithm Visualizer</h1>
-      <ArrayView values={player.array} highlight={player.highlight} />
-      <Controls
-        isPlaying={player.isPlaying}
-        isDone={player.isDone}
-        stepIndex={player.stepIndex}
-        totalSteps={player.totalSteps}
-        speed={player.speed}
-        onPlay={player.play}
-        onPause={player.pause}
-        onStepForward={player.stepForward}
-        onStepBack={player.stepBack}
-        onReset={player.reset}
-        onSpeedChange={player.setSpeed}
+      <AlgorithmPicker
+        algorithms={sortingAlgorithms}
+        selectedId={selectedId}
+        onSelect={setSelectedId}
+      />
+      <SortingVisualizer
+        key={selectedId}
+        initialArray={initialArray}
+        algorithmFn={selected.run}
       />
     </div>
   );

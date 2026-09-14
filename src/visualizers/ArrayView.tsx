@@ -1,26 +1,37 @@
+import type { Highlight } from "../hooks/useAlgorithmPlayer";
 import "./ArrayView.css";
 
 type ArrayViewProps = {
   values: number[];
+  highlight?: Highlight;
 };
 
-// TODO (Milestone 0 — you write this):
-// Render one bar per entry in `values`. Map each number to a div's height
-// (or width, if you'd rather go horizontal) so bigger numbers look taller.
-//
-// Hints, not answers:
-// - You'll want to `.map()` over `values` with index, and give each
-//   rendered element a `key`.
-// - Height in px/% needs *some* number to scale against — think about
-//   what "100% tall" should mean relative to the values you're given.
-// - Keep this component dumb: it only knows about `values` right now.
-//   No algorithm knowledge, no highlighting yet — that's a later milestone.
-export function ArrayView({ values }: ArrayViewProps) {
-  return <div className="array-view">{
-    values.map((value, index) => (
-      <div className="bar" key={index} style={{ height: `${value / Math.max(...values) * 100}%` }}>
-        {value}</div>
-    ))
-  }
-  </div>;
+export function ArrayView({ values, highlight }: ArrayViewProps) {
+  const max = Math.max(...values);
+
+  return (
+    <div className="array-view">
+      {values.map((value, index) => {
+        const isCompared = highlight?.compared?.includes(index) ?? false;
+        const isSwapped = highlight?.swapped?.includes(index) ?? false;
+        const className = [
+          "bar",
+          isCompared && "bar--compared",
+          isSwapped && "bar--swapped",
+        ]
+          .filter(Boolean)
+          .join(" ");
+
+        return (
+          <div
+            className={className}
+            key={index}
+            style={{ height: `${(value / max) * 100}%` }}
+          >
+            {value}
+          </div>
+        );
+      })}
+    </div>
+  );
 }

@@ -6,9 +6,16 @@
   padding: 1rem;
 }
 
-
 .array-view .bar {
   flex: 1;
   background: var(--accent);
+  transition: background-color 100ms ease;
 }
 
+.array-view .bar--compared {
+  background: #f5a623;
+}
+
+.array-view .bar--swapped {
+  background: #e0433c;
+}

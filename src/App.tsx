@@ -1,10 +1,9 @@
 import { bubbleSort } from "./algorithms/sorting/bubbleSort";
+import { Controls } from "./components/Controls";
 import { useAlgorithmPlayer } from "./hooks/useAlgorithmPlayer";
 import { ArrayView } from "./visualizers/ArrayView";
 import "./App.css";
 
-// Milestone 2: temporary wiring to exercise useAlgorithmPlayer while you
-// build it. This gets replaced by real Controls UI in the next milestone.
 const initialArray = [5, 2, 8, 1, 9, 3, 7, 4, 6];
 
 function App() {
@@ -13,10 +12,20 @@ function App() {
   return (
     <div className="app">
       <h1>Algorithm Visualizer</h1>
-      <ArrayView values={player.array} />
-      <button type="button" onClick={player.stepForward}>
-        Step
-      </button>
+      <ArrayView values={player.array} highlight={player.highlight} />
+      <Controls
+        isPlaying={player.isPlaying}
+        isDone={player.isDone}
+        stepIndex={player.stepIndex}
+        totalSteps={player.totalSteps}
+        speed={player.speed}
+        onPlay={player.play}
+        onPause={player.pause}
+        onStepForward={player.stepForward}
+        onStepBack={player.stepBack}
+        onReset={player.reset}
+        onSpeedChange={player.setSpeed}
+      />
     </div>
   );
 }

@@ -21,6 +21,8 @@ describe("bubbleSort", () => {
 
   it("ends with a done step", () => {
     const steps = collectSteps(bubbleSort([3, 1, 2]));
-    expect(steps.at(-1)).toEqual({ type: "done" });
+    // toMatchObject, not toEqual: a done step may also carry an optional
+    // `line` field (see types.ts) that this test doesn't care about.
+    expect(steps.at(-1)).toMatchObject({ type: "done" });
   });
 });

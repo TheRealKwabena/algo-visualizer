@@ -1,4 +1,6 @@
 import { bubbleSort } from "./algorithms/sorting/bubbleSort";
+import { algorithmSource } from "./algorithms/sorting/source";
+import { CodeView } from "./components/CodeView";
 import { Controls } from "./components/Controls";
 import { useAlgorithmPlayer } from "./hooks/useAlgorithmPlayer";
 import { ArrayView } from "./visualizers/ArrayView";
@@ -26,6 +28,7 @@ function App() {
         onReset={player.reset}
         onSpeedChange={player.setSpeed}
       />
+      <CodeView source={algorithmSource.bubble} currentLine={player.currentLine} />
     </div>
   );
 }

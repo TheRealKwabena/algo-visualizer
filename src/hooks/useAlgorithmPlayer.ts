@@ -25,6 +25,11 @@ export type PlayerState = {
   isPlaying: boolean;
   isDone: boolean;
   speed: number; // ms delay between steps during play()
+  // Source line (see Step['line'] in types.ts) of the most recently
+  // applied step, for CodeView's current-line highlighting. null before
+  // any step has been applied, or if the running algorithm hasn't been
+  // annotated with line numbers.
+  currentLine: number | null;
 };
 
 // TODO: design your action union. Some actions to consider:
@@ -46,24 +51,25 @@ type PlayerAction = | {type: "PULL_NEXT_STEP" ; step: Step} |  {type: "STEP_FORW
 function applyStep(
   array: number[],
   step: Step,
-): { array: number[]; highlight: Highlight } {
+): { array: number[]; highlight: Highlight; line: number | null } {
+  const line = step.line ?? null;
   switch(step.type) {
     case 'compare':
-      
-      return {array, highlight: {compared: step.indices}}
+
+      return {array, highlight: {compared: step.indices}, line}
     case 'swap':
       const copy = [...array];
       [copy[step.indices[0]], copy[step.indices[1]]] = [copy[step.indices[1]], copy[step.indices[0]]];
-      return {array: copy,  highlight: {swapped: step.indices}}
+      return {array: copy,  highlight: {swapped: step.indices}, line}
     case 'overwrite':
       {
         const copy = [...array];
         copy[step.index] = step.value;
-        return {array: copy, highlight: {}}
-        
+        return {array: copy, highlight: {}, line}
+
       }
     case 'done':
-      return {array, highlight: {}}
+      return {array, highlight: {}, line}
   }
 }
 
@@ -76,24 +82,26 @@ function applyStep(
 function replaySteps(
   initialArray: number[],
   steps: Step[],
-): { array: number[]; highlight: Highlight } {
+): { array: number[]; highlight: Highlight; line: number | null } {
   let array = initialArray;
   let highlight: Highlight = {};
+  let line: number | null = null;
   for (const step of steps) {
-    ({ array, highlight } = applyStep(array, step));
+    ({ array, highlight, line } = applyStep(array, step));
   }
-  return { array, highlight };
+  return { array, highlight, line };
 }
 
 function reducer(state: PlayerState, action: PlayerAction): PlayerState {
   switch (action.type) {
     case "PULL_NEXT_STEP": {
-      const { array, highlight } = applyStep(state.array, action.step);
+      const { array, highlight, line } = applyStep(state.array, action.step);
       const isDone = action.step.type === "done";
       return {
         ...state,
         array,
         highlight,
+        currentLine: line,
         isDone,
         // Only ever turn playback OFF here (when the algorithm reports
         // it's done). Never turn it on — that's PLAY's job alone.
@@ -108,18 +116,19 @@ function reducer(state: PlayerState, action: PlayerAction): PlayerState {
       // Replaying a step that's already sitting in the buffer (from an
       // earlier stepBack) — no need to touch the generator at all.
       const stepToReplay = state.steps[state.stepIndex];
-      const { array, highlight } = applyStep(state.array, stepToReplay);
+      const { array, highlight, line } = applyStep(state.array, stepToReplay);
       return {
         ...state,
         array,
         highlight,
+        currentLine: line,
         stepIndex: state.stepIndex + 1,
         isDone: stepToReplay.type === "done",
       };
     }
     case "STEP_BACK": {
       const newStepIndex = state.stepIndex - 1;
-      const { array, highlight } = replaySteps(
+      const { array, highlight, line } = replaySteps(
         state.initialArray,
         state.steps.slice(0, newStepIndex),
       );
@@ -127,6 +136,7 @@ function reducer(state: PlayerState, action: PlayerAction): PlayerState {
         ...state,
         array,
         highlight,
+        currentLine: line,
         stepIndex: newStepIndex,
         isDone: false,
         isPlaying: false,
@@ -147,6 +157,7 @@ function reducer(state: PlayerState, action: PlayerAction): PlayerState {
         ...state,
         array: state.initialArray,
         highlight: {},
+        currentLine: null,
         steps: [],
         stepIndex: 0,
         isPlaying: false,
@@ -174,6 +185,7 @@ function initPlayerState(initialArray: number[]): PlayerState {
     isPlaying: false,
     isDone: false,
     speed: 400,
+    currentLine: null,
   };
 }
 
@@ -274,6 +286,7 @@ export function useAlgorithmPlayer(
     stepIndex: state.stepIndex,
     totalSteps: state.steps.length,
     speed: state.speed,
+    currentLine: state.currentLine,
     play,
     pause,
     stepForward,

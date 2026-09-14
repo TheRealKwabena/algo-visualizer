@@ -1,0 +1,49 @@
+.code-view {
+  text-align: left;
+  max-width: 640px;
+  max-height: 400px;
+  overflow: auto;
+  margin: 1rem auto 0;
+  padding: 0.75rem 0;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* index.css has a leftover global `code { display: inline-flex; ... }`
+   rule from the Vite template (meant for small inline doc snippets like
+   <code>src/App.tsx</code>). Without this override it turns the <code>
+   below into a flex container, which collapses all 48 line divs into a
+   single flex row instead of stacking them as blocks. */
+.code-view code {
+  display: block;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+
+.code-view__line {
+  display: flex;
+  padding: 0 0.75rem;
+  white-space: pre;
+}
+
+.code-view__line--current {
+  background: var(--accent-bg);
+  border-left: 3px solid var(--accent);
+  padding-left: calc(0.75rem - 3px);
+}
+
+.code-view__line-number {
+  flex: 0 0 2.5rem;
+  color: var(--text);
+  opacity: 0.5;
+  user-select: none;
+}
+
+.code-view__line-text {
+  color: var(--text-h);
+}

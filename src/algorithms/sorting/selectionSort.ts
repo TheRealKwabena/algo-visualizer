@@ -25,4 +25,18 @@ export const selectionSort: SortAlgorithm = function* (
   array: number[],
 ): Generator<Step, void, unknown> {
   // your implementation here
+
+  let copy = [...array];
+
+  for (let i = 0; i < copy.length; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < copy.length; j++) {
+      yield {type: 'compare', indices: [minIndex, j]};
+    }
+    if (minIndex !== i) {
+      yield {type: 'swap', indices: [i, minIndex]};
+      [copy[i], copy[minIndex]] = [copy[minIndex], copy[i]];
+    }
+  }
+  yield {type: 'done'};
 };

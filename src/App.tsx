@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { sortingAlgorithms } from "./algorithms/sorting";
+import { algorithmSource } from "./algorithms/sorting/source";
 import { AlgorithmPicker } from "./components/AlgorithmPicker";
 import { SortingVisualizer } from "./components/SortingVisualizer";
 import "./App.css";
@@ -24,6 +25,7 @@ function App() {
         key={selectedId}
         initialArray={initialArray}
         algorithmFn={selected.run}
+        source={algorithmSource[selected.id]}
       />
     </div>
   );

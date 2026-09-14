@@ -16,6 +16,11 @@ import type { SortAlgorithm, Step } from "../types";
 // Worth noticing once you've built it and can see it animate: insertion
 // sort does a lot fewer comparisons than bubble sort on a *nearly sorted*
 // array — bubble sort doesn't know to stop early like that.
+//
+// NOTE: the `line` numbers below are self-referential metadata for
+// CodeView's current-line highlighting (see types.ts). They must match
+// the actual line each yield sits on in THIS file — if you reformat or
+// add/remove lines above a yield, update its `line` value to match.
 export const insertionSort: SortAlgorithm = function* (
   array: number[],
 ): Generator<Step, void, unknown> {
@@ -28,13 +33,13 @@ export const insertionSort: SortAlgorithm = function* (
     const value = copy[i];
     let j = i - 1;
     while (j >= 0 && copy[j] > value) {
-      yield {type: 'compare', indices: [j, j + 1]};
+      yield {type: 'compare', indices: [j, j + 1], line: 36};
       copy[j + 1] = copy[j];
-      yield {type: 'overwrite', index: j + 1, value: copy[j]};
+      yield {type: 'overwrite', index: j + 1, value: copy[j], line: 38};
       j--;
     }
     copy[j + 1] = value;
-    yield {type: 'overwrite', index: j + 1, value: value};
+    yield {type: 'overwrite', index: j + 1, value: value, line: 42};
   }
-  yield {type: 'done'};
+  yield {type: 'done', line: 44};
 };

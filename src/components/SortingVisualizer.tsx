@@ -1,11 +1,13 @@
 import type { SortAlgorithm } from "../algorithms/types";
 import { useAlgorithmPlayer } from "../hooks/useAlgorithmPlayer";
 import { ArrayView } from "../visualizers/ArrayView";
+import { CodeView } from "./CodeView";
 import { Controls } from "./Controls";
 
 type SortingVisualizerProps = {
   initialArray: number[];
   algorithmFn: SortAlgorithm;
+  source: string;
 };
 
 // Deliberately kept dumb about *which* algorithm it's running — App.tsx
@@ -16,6 +18,7 @@ type SortingVisualizerProps = {
 export function SortingVisualizer({
   initialArray,
   algorithmFn,
+  source,
 }: SortingVisualizerProps) {
   const player = useAlgorithmPlayer(initialArray, algorithmFn);
 
@@ -35,6 +38,7 @@ export function SortingVisualizer({
         onReset={player.reset}
         onSpeedChange={player.setSpeed}
       />
+      <CodeView source={source} currentLine={player.currentLine} />
     </>
   );
 }

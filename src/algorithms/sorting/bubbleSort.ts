@@ -26,18 +26,22 @@ import type { SortAlgorithm, Step } from "../types";
 //   are against the right values.
 // - Bubble sort's optimization: after pass k, the last k elements are
 //   guaranteed sorted — you don't need to compare into them again.
+// NOTE: the `line` numbers below are self-referential metadata for
+// CodeView's current-line highlighting (see types.ts). They must match
+// the actual line each yield sits on in THIS file — if you reformat or
+// add/remove lines above a yield, update its `line` value to match.
 export const bubbleSort: SortAlgorithm = function* (array: number[]): Generator<Step, void, unknown> {
   // your implementation here
   const copy = [...array];
   for (let i = 0; i < copy.length; i++) {
     for (let j = 0; j < copy.length - i - 1; j++) {
-      yield {type: 'compare', indices:[j, j + 1]};
+      yield {type: 'compare', indices:[j, j + 1], line: 38};
 
       if (copy[j] > copy[j + 1]) {
         [copy[j], copy[j + 1]] = [copy[j + 1], copy[j]];
-        yield {type:'swap', indices: [j, j +1]};
+        yield {type:'swap', indices: [j, j +1], line: 42};
       }
     }
   }
-  yield {type: 'done'};
+  yield {type: 'done', line: 46};
 };

@@ -21,6 +21,6 @@ describe("selectionSort", () => {
 
   it("ends with a done step", () => {
     const steps = collectSteps(selectionSort([3, 1, 2]));
-    expect(steps.at(-1)).toEqual({ type: "done" });
+    expect(steps.at(-1)).toMatchObject({ type: "done" });
   });
 });

@@ -13,8 +13,8 @@ function App() {
   return (
     <div className="app">
       <h1>Algorithm Visualizer</h1>
-      <ArrayView values={player.array ?? initialArray} />
-      <button type="button" onClick={() => player.stepForward?.()}>
+      <ArrayView values={player.array} />
+      <button type="button" onClick={player.stepForward}>
         Step
       </button>
     </div>

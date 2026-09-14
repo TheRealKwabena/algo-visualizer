@@ -273,6 +273,7 @@ export function useAlgorithmPlayer(
     isDone: state.isDone,
     stepIndex: state.stepIndex,
     totalSteps: state.steps.length,
+    speed: state.speed,
     play,
     pause,
     stepForward,

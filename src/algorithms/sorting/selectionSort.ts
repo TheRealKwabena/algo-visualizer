@@ -21,6 +21,11 @@ import type { SortAlgorithm, Step } from "../types";
 // Worth noticing once animated: selection sort's pattern looks very
 // different from bubble/insertion — long scans, then one decisive jump,
 // rather than many small local swaps.
+//
+// NOTE: the `line` numbers below are self-referential metadata for
+// CodeView's current-line highlighting (see types.ts). They must match
+// the actual line each yield sits on in THIS file — if you reformat or
+// add/remove lines above a yield, update its `line` value to match.
 export const selectionSort: SortAlgorithm = function* (
   array: number[],
 ): Generator<Step, void, unknown> {
@@ -28,15 +33,18 @@ export const selectionSort: SortAlgorithm = function* (
 
   let copy = [...array];
 
-  for (let i = 0; i < copy.length; i++) {
+  for (let i = 0; i < copy.length - 1; i++) {
     let minIndex = i;
     for (let j = i + 1; j < copy.length; j++) {
-      yield {type: 'compare', indices: [minIndex, j]};
+      yield {type: 'compare', indices: [minIndex, j], line: 39};
+      if (copy[j] < copy[minIndex]) {  // if the current element is less than the minimum, update the minimum index
+        minIndex = j;
+      }
     }
     if (minIndex !== i) {
-      yield {type: 'swap', indices: [i, minIndex]};
+      yield {type: 'swap', indices: [i, minIndex], line: 45};
       [copy[i], copy[minIndex]] = [copy[minIndex], copy[i]];
     }
   }
-  yield {type: 'done'};
+  yield {type: 'done', line: 49};
 };

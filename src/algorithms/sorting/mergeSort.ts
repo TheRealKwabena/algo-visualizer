@@ -52,5 +52,83 @@ import type { SortAlgorithm, Step } from "../types";
 export const mergeSort: SortAlgorithm = function* (
   array: number[],
 ): Generator<Step, void, unknown> {
-  // your implementation here
+  // your implementation here\\
+
+  let copy = [...array]
+
+  yield* sortRange(copy, 0, copy.length - 1)
+
+  yield {type: 'done'}
 };
+
+
+
+function* sortRange(copy: number[], lo: number, hi: number) : Generator<Step, void, unknown> {
+  if (lo >= hi) {
+    return;
+  }
+
+  /// idea is to split the array into 2 until we have single items
+
+  const mid = Math.floor((hi + lo) / 2)
+  yield* sortRange(copy, lo, mid)
+  yield* sortRange(copy, mid + 1, hi)
+  yield* merge(copy, lo, mid, hi)
+
+}
+
+
+function* merge(copy: number[], lo: number, mid: number, hi: number): Generator<Step, void, unknown> {
+  //[3, 1,4,  2, 6]
+
+  // mid = 2 lo = 0, hi = 4
+  //[3, 1, 4] [ 2, 6]
+
+  //
+
+  const left = copy.slice(lo, mid + 1)
+  const right = copy.slice(mid + 1, hi + 1)
+
+
+  let i = 0
+  let j = 0
+
+  let k = lo
+
+
+
+  while (i < left.length && j < right.length) {
+    yield {type : 'compare', indices:[lo + i, mid + 1 + j]}
+    if (left[i] <= right[j]) {
+      copy[k] = left[i]
+      yield {type: 'overwrite', index: k, value: left[i]}
+      k++
+      i++
+
+
+    } else {
+      copy[k] = right[j]
+      yield {type: 'overwrite', index: k, value: right[j]}
+      k+= 1
+      j+= 1
+
+    }
+  }
+
+  while (i < left.length) {
+    copy[k] = left[i]
+    yield {type: 'overwrite', index: k, value: left[i]}
+    k++
+    i++
+  }
+
+
+  while (j < right.length) {
+    copy[k] = right[j]
+    yield {type: 'overwrite', index: k, value: right[j]}
+    k++
+    j++
+  }
+
+ 
+}
